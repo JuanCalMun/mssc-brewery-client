@@ -5,6 +5,7 @@ import guru.springframework.msscbreweryclient.web.model.CustomerDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,7 +23,9 @@ public class BreweryClient {
     public BreweryClient(@Value("${sfg.brewery.apihost}") String apihost,
                          RestTemplateBuilder restTemplateBuilder) {
         this.apihost = apihost;
-        restTemplate = restTemplateBuilder.build();
+        restTemplate = restTemplateBuilder
+                .requestFactory(HttpComponentsClientHttpRequestFactory::new)
+                .build();
     }
 
     public BeerDto getBeerByUUID(UUID beerId) {
